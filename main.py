@@ -1,16 +1,17 @@
 import sqlite3
 import sys
-from PyQt5 import uic
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidgetItem, QHeaderView, QWidget
+from main_ui import Ui_MainWindow
+from addEditCoffeeForm import Ui_Form
 
 
-class EditWindow(QWidget):
+class EditWindow(QWidget, Ui_Form):
     save_signal = pyqtSignal(bool)
 
     def __init__(self, database):
         super().__init__()
-        uic.loadUi('addEditCoffeeForm.ui', self)
+        self.setupUi(self)
         self.setWindowTitle('Изменение или создание записи')
         self.con = database
         self.cur = self.con.cursor()
@@ -48,11 +49,11 @@ class EditWindow(QWidget):
         self.close()
 
 
-class CoffeeTable(QMainWindow):
+class CoffeeTable(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('main.ui', self)
-        self.con = sqlite3.connect("coffee.sqlite")
+        self.setupUi(self)
+        self.con = sqlite3.connect("data/coffee.sqlite")
         self.cur = self.con.cursor()
 
         self.btn_edit.clicked.connect(self.edit_db)
